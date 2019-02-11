@@ -2,3 +2,4 @@
 type = custom/script
 exec = /home/faith/Source/controllerbattery/bin/Release/netcoreapp2.2/linux-x64/publish/controllerbattery
 format-underline = #BF0077
+click-right = bt-device -d "Wireless Controller"
