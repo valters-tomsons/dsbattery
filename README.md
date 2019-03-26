@@ -3,6 +3,8 @@ simple script that displays selected wireless controller battery to be used as m
 
 ![](https://i.imgur.com/9r9o1hP.png)
 
+![](https://i.imgur.com/GXa37M9.png)
+
 # Usage
 Change your controller path name in `Program.cs`, line 11 (see `upower -e`)
 
