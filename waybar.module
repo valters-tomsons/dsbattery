@@ -1,0 +1,7 @@
+    "custom/controllerbattery": {
+            "format": "{}",
+            "interval": 3,
+            "escape": true,
+            "exec": "controllerbattery",
+            "on-click-right": "bt-device -d \"Wireless Controller\""
+    }
