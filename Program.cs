@@ -15,7 +15,7 @@ namespace controllerbattery
                 System.Console.WriteLine($"🎮 {reporter.GetPercentage()}%");
             }
 
-            System.Console.WriteLine("");
+            System.Console.WriteLine(String.Empty);
         }
     }
 }
