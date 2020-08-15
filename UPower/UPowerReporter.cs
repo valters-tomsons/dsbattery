@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -8,10 +6,10 @@ namespace controllerbattery.UPower
 {
     public class UPowerReporter : IBatteryReporter
     {
-        private string DevicePath { get; set; }
-        private IEnumerable<string> DeviceList { get; set; }
+        private string DevicePath { get; }
+        private IEnumerable<string> DeviceList { get; }
 
-        private static string PercentageLookup = "percentage:";
+        private const string PercentageLookup = "percentage:";
 
         public UPowerReporter(string matchDeviceName)
         {

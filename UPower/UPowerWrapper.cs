@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 
@@ -8,7 +7,7 @@ namespace controllerbattery.UPower
 {
     public class UPowerWrapper
     {
-        private Process ChildProcess { get; set; }
+        private Process ChildProcess { get; }
 
         public UPowerWrapper(string[] args)
         {

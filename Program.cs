@@ -1,21 +1,20 @@
 ﻿using System;
-using System.Diagnostics;
 using controllerbattery.UPower;
 
 namespace controllerbattery
 {
-    class Program
+    internal static class Program
     {
-        static void Main(string[] args)
+        private static void Main()
         {
             var reporter = new UPowerReporter("gaming_input_sony_controller");
 
             if(reporter.IsConnected())
             {
-                System.Console.WriteLine($"🎮 {reporter.GetPercentage()}%");
+                Console.WriteLine($"🎮 {reporter.GetPercentage()}%");
             }
 
-            System.Console.WriteLine(String.Empty);
+            Console.WriteLine(string.Empty);
         }
     }
 }
