@@ -21,7 +21,7 @@ namespace controllerbattery
 
                 if(isCharging)
                 {
-                    icon = "💡";
+                    icon = "🎮↑";
                 }
 
                 Console.WriteLine($"{icon} {percentage}%");
