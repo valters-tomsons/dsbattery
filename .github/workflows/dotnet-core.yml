@@ -20,7 +20,7 @@ jobs:
     - name: Install dependencies
       run: dotnet restore
     - name: Publish
-      run: dotnet artifact -o release --configuration Release --no-restore
+      run: dotnet publish -o artifact --configuration Release --no-restore
       
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2.2.1
