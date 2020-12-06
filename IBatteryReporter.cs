@@ -1,11 +1,10 @@
 using System.Collections.Generic;
+using Models;
 
 namespace controllerbattery
 {
     public interface IBatteryReporter
     {
-        bool IsConnected();
-        int GetPercentage();
-        ICollection<string> QueryDeviceInfo();
+        IEnumerable<Device> QueryConnected(string pathQuery);
     }
 }

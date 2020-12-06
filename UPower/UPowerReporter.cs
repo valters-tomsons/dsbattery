@@ -1,77 +1,56 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Models;
+using UPower;
 
 namespace controllerbattery.UPower
 {
     public class UPowerReporter : IBatteryReporter
     {
-        private string DevicePath { get; }
         private IEnumerable<string> DeviceList { get; }
-        private ICollection<string> LastInfoQuery { get; set; }
 
-        private const string PercentageLookup = "percentage:";
-        private const string IconLookup = "icon-name:";
-
-        public UPowerReporter(string matchDeviceName)
+        public UPowerReporter()
         {
             DeviceList = EnumerateDevices();
-            DevicePath = GetDevicePath(matchDeviceName);
         }
 
-        public bool IsConnected()
+        public IEnumerable<Device> QueryConnected(string pathQuery)
         {
-            return DevicePath != null;
-        }
+            var paths = FindConnected(pathQuery);
+            var devices = new List<Device>();
 
-        public ICollection<string> QueryDeviceInfo()
-        {
-            var arguments = new string[] { "-i", DevicePath };
-            var upower = new UPowerWrapper(arguments);
-            LastInfoQuery = upower.GetOutput();
-            return LastInfoQuery;
-        }
-
-        public int GetPercentage()
-        {
-            if(LastInfoQuery == null)
+            foreach(var path in paths)
             {
-                QueryDeviceInfo();
+                var deviceInfo = QueryDeviceInfo(path);
+
+                var device = new Device(path){
+                    BatteryPercentage = UPowerParser.GetPercentage(deviceInfo),
+                    IconName = UPowerParser.GetIconName(deviceInfo)
+                };
+
+                devices.Add(device);
             }
 
-            var output = LastInfoQuery;
-
-            var percentageOutput = output.Single(x => x.Contains(PercentageLookup));
-            var extractPercentage = Regex.Match(percentageOutput, @"\d+").Value;
-
-            return int.Parse(extractPercentage);
+            return devices;
         }
 
-        public string GetIconName()
+        private ICollection<string> QueryDeviceInfo(string devicePath)
         {
-            if(LastInfoQuery == null)
-            {
-                QueryDeviceInfo();
-            }
-
-            var output = LastInfoQuery;
-
-            var iconOutput = output.Single(x => x.Contains(IconLookup));
-            var result = Regex.Match(iconOutput, "'([^']*)'").Value;
-
-            return result.Replace("'", string.Empty);
+            var arguments = new string[] { "-i", devicePath};
+            return new UPowerWrapper(arguments).GetOutput();
         }
 
-        private string GetDevicePath(string matchName)
+        private IEnumerable<string> FindConnected(string pathQuery)
         {
-            return DeviceList.SingleOrDefault(x => x.Contains(matchName));
+            return DeviceList.Where(x => x.Contains(pathQuery));
         }
 
         private IEnumerable<string> EnumerateDevices()
         {
             var arguments = new string[] { "-e" };
-            var upower = new UPowerWrapper(arguments);
-            return upower.GetOutput();
+            return new UPowerWrapper(arguments).GetOutput();
         }
     }
 }

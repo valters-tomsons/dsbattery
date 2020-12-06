@@ -6,15 +6,19 @@ namespace controllerbattery
     internal static class Program
     {
         private const string ChargingIconName = "battery-full-charging-symbolic";
+        private const string Dualshock4 = "gaming_input_sony_controller";
 
         private static void Main()
         {
-            var reporter = new UPowerReporter("gaming_input_sony_controller");
+            var reporter = new UPowerReporter();
 
-            if(reporter.IsConnected())
+            var devices = reporter.QueryConnected(Dualshock4);
+
+            foreach(var device in devices)
             {
-                var percentage = reporter.GetPercentage();
-                var iconName = reporter.GetIconName();
+                var percentage = device.BatteryPercentage;
+                var iconName = device.IconName;
+
                 var isCharging = iconName.Equals(ChargingIconName);
 
                 var icon = "🎮";
@@ -24,7 +28,7 @@ namespace controllerbattery
                     icon = "🎮↑";
                 }
 
-                Console.WriteLine($"{icon} {percentage}%");
+                Console.Write($"{icon} {percentage}%");
             }
 
             Console.WriteLine(string.Empty);
