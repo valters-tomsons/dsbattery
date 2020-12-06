@@ -1,5 +1,9 @@
-﻿using System;
+﻿using System.Text;
+using System;
+using System.Collections.Generic;
 using controllerbattery.UPower;
+using Models;
+using System.Linq;
 
 namespace controllerbattery
 {
@@ -13,9 +17,14 @@ namespace controllerbattery
             var reporter = new UPowerReporter();
 
             var devices = reporter.QueryConnected(Dualshock4);
+            var deviceCount = devices.Count();
 
-            foreach(var device in devices)
+            var result = new StringBuilder();
+
+            for(int i = 0; i < deviceCount; i++)
             {
+                var device = devices.ElementAt(i);
+
                 var percentage = device.BatteryPercentage;
                 var iconName = device.IconName;
 
@@ -28,10 +37,15 @@ namespace controllerbattery
                     icon = "🎮↑";
                 }
 
-                Console.Write($"{icon} {percentage}%");
+                if(deviceCount > 1 && deviceCount == i + 1)
+                {
+                    result.Append(" | ");
+                }
+
+                result.Append(icon).Append(" ").Append(percentage).Append("%");
             }
 
-            Console.WriteLine(string.Empty);
+            Console.WriteLine(result.ToString());
         }
     }
 }
