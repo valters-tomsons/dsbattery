@@ -1,25 +1,22 @@
-# controllerbattery
-simple script that displays selected wireless controller battery to be used as module for system bars
+# dsbattery
+Small linux utility to display connected DualShock 4 battery indicators in status bars.
 
-![](https://i.imgur.com/9r9o1hP.png)
+![polybar-preview](https://i.imgur.com/9r9o1hP.png)
 
-![](https://i.imgur.com/GXa37M9.png)
+![waybar-preview](https://i.imgur.com/GXa37M9.png)
 
-# Usage
-Change your controller path name in `Program.cs`, line 11 (see `upower -e`)
+## Usage
 
-Change your controller device name in module.
+1. Install dsbattery
+2. Install provided module to statusbar
 
-If you use polybar or wayland, see their respective *.module file.
+Should be trivial to add support for other controllers.
 
-# Dependencies
-.NET Core 2.2
+## Dependencies
 
-upower
+* upower
+* bt-device
 
-bt-device
+## Building
 
-# Building
-Install `.NET Core SDK 2.2`
-
-Build project with `-c Release`
+Requires `.NET Core SDK 3.1`

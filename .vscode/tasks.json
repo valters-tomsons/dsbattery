@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/controllerbattery.csproj"
+                "${workspaceFolder}/dsbattery.csproj"
             ],
             "problemMatcher": "$msCompile"
         }
