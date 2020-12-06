@@ -5,6 +5,8 @@ Small linux utility to display connected DualShock 4 battery indicators in statu
 
 ![waybar-preview](https://i.imgur.com/GXa37M9.png)
 
+![charging-icon](https://i.imgur.com/62s66R7.png)
+
 ## Usage
 
 1. Install dsbattery
