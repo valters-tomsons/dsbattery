@@ -10,6 +10,7 @@
     <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
     <PublishReadyToRunShowWarnings>true</PublishReadyToRunShowWarnings>
     <RootNamespace>dsbattery</RootNamespace>
+    <InvariantGlobalization>true</InvariantGlobalization>
   </PropertyGroup>
 
 </Project>
