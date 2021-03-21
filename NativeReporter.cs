@@ -45,7 +45,14 @@ namespace dsbattery
 
             var statusResult = await File.ReadAllTextAsync(statusPath.ToString()).ConfigureAwait(false);
 
-            Enum.TryParse(typeof(Ds4Status), statusResult, true, out var status);
+            var statusParsed = Enum.TryParse(typeof(Ds4Status), statusResult, true, out var status);
+
+            if(!statusParsed)
+            {
+                Console.WriteLine("WARNING: Unknown status, defaulting to `unknown`");
+                status = Ds4Status.Unknown;
+            }
+
             var battery = int.Parse(await batteryResultTask);
 
             return new Device(path){
