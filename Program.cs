@@ -1,22 +1,20 @@
 ﻿using System.Text;
 using System;
-using System.Collections.Generic;
-using controllerbattery.UPower;
-using Models;
 using System.Linq;
+using System.Threading.Tasks;
+using dsbattery.Interfaces;
 
-namespace controllerbattery
+namespace dsbattery
 {
     internal static class Program
     {
-        private const string ChargingIconName = "battery-full-charging-symbolic";
-        private const string Dualshock4 = "gaming_input_sony_controller";
+        private const string Dualshock4_Prefix = "sony_controller_battery";
 
-        private static void Main()
+        private static readonly IBatteryReporter _reporter = new NativeReporter();
+
+        private async static Task Main()
         {
-            var reporter = new UPowerReporter();
-
-            var devices = reporter.QueryConnected(Dualshock4);
+            var devices = await _reporter.QueryConnected(Dualshock4_Prefix).ConfigureAwait(false);
             var deviceCount = devices.Count();
 
             var result = new StringBuilder();
@@ -25,16 +23,11 @@ namespace controllerbattery
             {
                 var device = devices.ElementAt(i);
 
-                var percentage = device.BatteryPercentage;
-                var iconName = device.IconName;
+                var icon = new StringBuilder("🎮");
 
-                var isCharging = iconName.Equals(ChargingIconName);
-
-                var icon = "🎮";
-
-                if(isCharging)
+                if(device.Status == Enums.Ds4Status.Charging)
                 {
-                    icon = "🎮↑";
+                    icon.Append('↑');
                 }
 
                 if(deviceCount > 1 && deviceCount == i + 1)
@@ -42,7 +35,7 @@ namespace controllerbattery
                     result.Append(" | ");
                 }
 
-                result.Append(icon).Append(" ").Append(percentage).Append("%");
+                result.Append(icon).Append(' ').Append(device.BatteryPercentage).Append('%');
             }
 
             Console.WriteLine(result.ToString());

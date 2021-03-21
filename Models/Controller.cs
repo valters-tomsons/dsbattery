@@ -1,6 +1,6 @@
-using System;
+using dsbattery.Enums;
 
-namespace Models
+namespace dsbattery.Models
 {
     public class Device
     {
@@ -11,6 +11,6 @@ namespace Models
 
         public string Path;
         public int BatteryPercentage;
-        public string IconName;
+        public Ds4Status Status;
     }
 }
