@@ -26,18 +26,9 @@ namespace dsbattery
 
                 result.Append("🎮");
 
-                switch(device.Status)
+                if(device.Status == Ds4Status.Charging)
                 {
-                    case Ds4Status.Charging:
-                    {
-                        result.Append('↑');
-                        break;
-                    }
-                    case Ds4Status.Full:
-                    {
-                        result.Append('✓');
-                        break;
-                    }
+                    result.Append('↑');
                 }
 
                 result.Append(' ').Append(device.BatteryPercentage).Append('%');
