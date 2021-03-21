@@ -12,13 +12,10 @@ Small linux utility to display connected DualShock 4 battery indicators in statu
 1. Install dsbattery
 2. Install provided module to statusbar
 
-Should be trivial to add support for other controllers.
-
 ## Dependencies
 
-* upower
-* bt-device
+* `bt-device` - for disconnect functionality
 
 ## Building
 
-Requires `.NET Core SDK 3.1`
+Requires `.NET 5.0 SDK`

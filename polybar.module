@@ -2,3 +2,4 @@
 type = custom/script
 exec = dsbattery
 click-right = bt-device -d "Wireless Controller"
+label-padding = 1
