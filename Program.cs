@@ -3,6 +3,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using dsbattery.Interfaces;
+using dsbattery.Enums;
 
 namespace dsbattery
 {
@@ -25,9 +26,18 @@ namespace dsbattery
 
                 result.Append("🎮");
 
-                if(device.Status == Enums.Ds4Status.Charging)
+                switch(device.Status)
                 {
-                    result.Append('↑');
+                    case Ds4Status.Charging:
+                    {
+                        result.Append('↑');
+                        break;
+                    }
+                    case Ds4Status.Full:
+                    {
+                        result.Append('✓');
+                        break;
+                    }
                 }
 
                 result.Append(' ').Append(device.BatteryPercentage).Append('%');
