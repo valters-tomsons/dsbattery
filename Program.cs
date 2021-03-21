@@ -23,19 +23,19 @@ namespace dsbattery
             {
                 var device = devices.ElementAt(i);
 
-                var icon = new StringBuilder("🎮");
+                result.Append("🎮");
 
                 if(device.Status == Enums.Ds4Status.Charging)
                 {
-                    icon.Append('↑');
+                    result.Append('↑');
                 }
 
-                if(deviceCount > 1 && deviceCount == i + 1)
+                result.Append(' ').Append(device.BatteryPercentage).Append('%');
+
+                if(deviceCount > 1 && deviceCount != i + 1)
                 {
                     result.Append(" | ");
                 }
-
-                result.Append(icon).Append(' ').Append(device.BatteryPercentage).Append('%');
             }
 
             Console.WriteLine(result.ToString());
