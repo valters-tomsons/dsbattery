@@ -6,7 +6,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/bin/Debug/netcoreapp3.1/linux-x64/dsbattery.dll",
+            "program": "${workspaceFolder}/bin/Debug/net5.0/linux-x64/dsbattery.dll",
             "args": [],
             "cwd": "${workspaceFolder}",
             "console": "internalConsole",
