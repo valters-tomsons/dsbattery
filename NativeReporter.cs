@@ -37,27 +37,19 @@ namespace dsbattery
             capacityPath.Append(Path.DirectorySeparatorChar);
             capacityPath.Append(BatteryFile);
 
-            var batteryResultTask = File.ReadAllTextAsync(capacityPath.ToString()).ConfigureAwait(false);
+            var capacityResult = File.ReadAllTextAsync(capacityPath.ToString()).ConfigureAwait(false);
 
             var statusPath = new StringBuilder(path);
             statusPath.Append(Path.DirectorySeparatorChar);
             statusPath.Append(StatusFile);
 
             var statusResult = await File.ReadAllTextAsync(statusPath.ToString()).ConfigureAwait(false);
+            Enum.TryParse<Ds4Status>(statusResult, true, out var status);
 
-            var statusParsed = Enum.TryParse(typeof(Ds4Status), statusResult, true, out var status);
-
-            if(!statusParsed)
+            return new Device(path)
             {
-                Console.WriteLine("WARNING: Unknown status, defaulting to `unknown`");
-                status = Ds4Status.Unknown;
-            }
-
-            var battery = int.Parse(await batteryResultTask);
-
-            return new Device(path){
-                BatteryPercentage = battery,
-                Status = (Ds4Status) status
+                BatteryPercentage = int.Parse(await capacityResult),
+                Status = status
             };
         }
     }
