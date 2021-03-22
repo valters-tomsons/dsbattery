@@ -1,9 +1,9 @@
 ﻿using System.Text;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 using dsbattery.Interfaces;
 using dsbattery.Enums;
+using dsbattery.Models;
 
 namespace dsbattery
 {
@@ -16,30 +16,34 @@ namespace dsbattery
         private async static Task Main()
         {
             var devices = await _reporter.QueryConnected(Dualshock4_Prefix).ConfigureAwait(false);
-            var deviceCount = devices.Count();
+            var deviceLength = devices.Length;
 
             var result = new StringBuilder();
 
-            for(int i = 0; i < deviceCount; i++)
+            for(int i = 0; i < deviceLength; i++)
             {
-                var device = devices.ElementAt(i);
+                var device = devices[i];
+                result.AppendDevice(device);
 
-                result.Append("🎮");
-
-                if(device.Status == Ds4Status.Charging)
-                {
-                    result.Append('↑');
-                }
-
-                result.Append(' ').Append(device.BatteryPercentage).Append('%');
-
-                if(deviceCount > 1 && deviceCount != i + 1)
+                if(deviceLength > 1 && deviceLength != i + 1)
                 {
                     result.Append(" | ");
                 }
             }
 
             Console.WriteLine(result.ToString());
+        }
+
+        private static void AppendDevice(this StringBuilder builder, Device device)
+        {
+            builder.Append("🎮");
+
+            if (device.Status == Ds4Status.Charging)
+            {
+                builder.Append('↑');
+            }
+
+            builder.Append(' ').Append(device.BatteryPercentage).Append('%');
         }
     }
 }
