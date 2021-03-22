@@ -6,6 +6,6 @@ namespace dsbattery.Interfaces
 {
     public interface IBatteryReporter
     {
-        Task<IEnumerable<Device>> QueryConnected(string pathQuery);
+        Task<Device[]> QueryConnected(string pathQuery);
     }
 }

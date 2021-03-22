@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -16,19 +15,17 @@ namespace dsbattery
         private const string BatteryFile = "capacity";
         private const string StatusFile = "status";
 
-        public async Task<IEnumerable<Device>> QueryConnected(string pathQuery)
+        public async Task<Device[]> QueryConnected(string pathQuery)
         {
-            var devices = Directory.EnumerateFileSystemEntries(DeviceBasePath, pathQuery + "*");
+            var devices = Directory.EnumerateFileSystemEntries(DeviceBasePath, pathQuery + "*").ToArray();
+            var serialized = new Device[devices.Length];
 
-            var result = new List<Device>(devices.Count());
-
-            foreach(var device in devices)
+            for(var i = 0; i < serialized.Length; i++)
             {
-                var serialized = await SerializeDevice(device).ConfigureAwait(false);
-                result.Add(serialized);
+                serialized[i] = await SerializeDevice(devices[i]).ConfigureAwait(false);
             }
 
-            return result;
+            return serialized;
         }
 
         private static async Task<Device> SerializeDevice(string path)
