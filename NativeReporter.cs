@@ -12,8 +12,6 @@ namespace dsbattery
     public class NativeReporter : IBatteryReporter
     {
         private const string DeviceBasePath = "/sys/class/power_supply";
-        private const string BatteryFile = "capacity";
-        private const string StatusFile = "status";
 
         public async Task<Device[]> QueryConnected(string pathQuery)
         {
@@ -30,24 +28,39 @@ namespace dsbattery
 
         private static async Task<Device> SerializeDevice(string path)
         {
-            var capacityPath = new StringBuilder(path);
-            capacityPath.Append(Path.DirectorySeparatorChar);
-            capacityPath.Append(BatteryFile);
-
-            var capacityResult = File.ReadAllTextAsync(capacityPath.ToString()).ConfigureAwait(false);
-
-            var statusPath = new StringBuilder(path);
-            statusPath.Append(Path.DirectorySeparatorChar);
-            statusPath.Append(StatusFile);
-
-            var statusResult = await File.ReadAllTextAsync(statusPath.ToString()).ConfigureAwait(false);
-            Enum.TryParse<Ds4Status>(statusResult, true, out var status);
+            var battery = await ReadBattery(path).ConfigureAwait(false);
+            var status = await ReadStatus(path).ConfigureAwait(false);
 
             return new Device(path)
             {
-                BatteryPercentage = int.Parse(await capacityResult),
+                BatteryPercentage = battery,
                 Status = status
             };
+        }
+
+        private static async Task<int> ReadBattery(string devicePath)
+        {
+            const string property = "capacity";
+
+            var batteryResult = await ReadDeviceProperty(devicePath, property).ConfigureAwait(false);
+            return int.Parse(batteryResult);
+        }
+
+        private static async Task<Ds4Status> ReadStatus(string devicePath)
+        {
+            const string property = "status";
+
+            var statusResult = await ReadDeviceProperty(devicePath, property).ConfigureAwait(false);
+            return Enum.Parse<Ds4Status>(statusResult, true);
+        }
+
+        private static async Task<string> ReadDeviceProperty(string devicePath, string propertyName)
+        {
+            var statusPath = new StringBuilder(devicePath);
+            statusPath.Append(Path.DirectorySeparatorChar);
+            statusPath.Append(propertyName);
+
+            return await File.ReadAllTextAsync(statusPath.ToString()).ConfigureAwait(false);
         }
     }
 }
