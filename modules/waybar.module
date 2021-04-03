@@ -3,5 +3,5 @@
             "interval": 3,
             "escape": true,
             "exec": "dsbattery",
-            "on-click-right": "bt-device -d \"Wireless Controller\""
+            "on-click-right": "dsbattery -d"
     }

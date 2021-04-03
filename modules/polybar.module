@@ -1,5 +1,5 @@
 [module/dsbattery]
 type = custom/script
 exec = dsbattery
-click-right = bt-device -d "Wireless Controller"
+click-right = dsbattery -d
 label-padding = 1
