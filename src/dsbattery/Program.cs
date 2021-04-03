@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using dsbattery.Interfaces;
 using dsbattery.Enums;
 using dsbattery.Models;
+using dsbattery.Providers;
 
 namespace dsbattery
 {
@@ -11,7 +12,7 @@ namespace dsbattery
     {
         private const string Dualshock4_Prefix = "sony_controller_battery";
 
-        private static readonly IBatteryReporter _reporter = new NativeReporter();
+        private static readonly IDeviceReporter _reporter = new NativeReporter();
 
         private async static Task Main()
         {

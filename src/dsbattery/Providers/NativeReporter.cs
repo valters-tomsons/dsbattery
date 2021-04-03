@@ -7,9 +7,9 @@ using dsbattery.Enums;
 using dsbattery.Interfaces;
 using dsbattery.Models;
 
-namespace dsbattery
+namespace dsbattery.Providers
 {
-    public class NativeReporter : IBatteryReporter
+    public class NativeReporter : IDeviceReporter
     {
         private const string DeviceBasePath = "/sys/class/power_supply";
 
