@@ -24,12 +24,12 @@ jobs:
       
     - name: Build dsbattery release
       run: dotnet publish -o artifact --configuration Release --no-restore
-
+    
     - name: Copy README
-      uses: canastro/copy-action@0.0.2
-      with:
-        source: README.md
-        target: artifact/README.md
+      run: cp README.md artifact/
+      
+    - name: Copy modules
+      run: cp modules artifact/ -r
 
     - name: Upload build artifact
       uses: actions/upload-artifact@v2.2.2
