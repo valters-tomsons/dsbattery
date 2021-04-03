@@ -13,17 +13,33 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 5.0.x
+        
     - name: Install dependencies
       run: dotnet restore
-    - name: Publish
-      run: dotnet publish -o artifact --configuration Release --no-restore
       
-    - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v2.2.1
+    - name: Build dsbattery release
+      run: dotnet publish -o artifact --configuration Release --no-restore
+
+    - name: Copy README
+      uses: canastro/copy-action@0.0.2
       with:
-        path: artifact
+        source: README.md
+        target: artifact/README.md
+        
+    - name: Copy moduless
+      uses: MadaraUchiha/copy-action@0.0.1
+      with:
+        source: modules
+        target: artifact/statusbar-modules
+
+    - name: Upload build artifact
+      uses: actions/upload-artifact@v2.2.2
+      with:
+        path: ./artifact
         if-no-files-found: error
+        name: dsbattery-linux-x64
