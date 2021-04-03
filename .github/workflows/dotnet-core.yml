@@ -30,12 +30,6 @@ jobs:
       with:
         source: README.md
         target: artifact/README.md
-        
-    - name: Copy moduless
-      uses: MadaraUchiha/copy-action@0.0.1
-      with:
-        source: modules
-        target: artifact/statusbar-modules
 
     - name: Upload build artifact
       uses: actions/upload-artifact@v2.2.2
