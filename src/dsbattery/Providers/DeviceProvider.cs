@@ -30,11 +30,13 @@ namespace dsbattery.Providers
         {
             var battery = await ReadBattery(path).ConfigureAwait(false);
             var status = await ReadStatus(path).ConfigureAwait(false);
+            var macAddress = path.Split('_').LastOrDefault();
 
             return new DualshockDevice(path)
             {
                 BatteryPercentage = battery,
-                Status = status
+                Status = status,
+                Mac = macAddress
             };
         }
 
