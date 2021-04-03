@@ -7,10 +7,16 @@ Small linux utility to display connected DualShock 4 battery indicators in statu
 
 ![charging-icon](https://i.imgur.com/62s66R7.png)
 
+## Features
+
+* Show battery percentage of all connected Sony controllers
+* Provide indicator for charging devices
+* Disconnect all sony bluetooth controllers
+
 ## Usage
 
-1. Install dsbattery
-2. Install provided module to statusbar
+1. Install dsbattery to `$PATH`
+2. Add [provided modules](./modules/) to your statusbar configuration
 
 ## Dependencies
 
