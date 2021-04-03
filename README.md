@@ -11,7 +11,7 @@ Small linux utility to display connected DualShock 4 battery indicators in statu
 
 * Show battery percentage of all connected Sony controllers
 * Provide indicator for charging devices
-* Disconnect all sony bluetooth controllers
+* Disconnect all sony bluetooth controllers (by passing `-d` argument)
 
 ## Usage
 
