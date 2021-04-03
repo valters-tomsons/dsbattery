@@ -2,9 +2,9 @@ using dsbattery.Enums;
 
 namespace dsbattery.Models
 {
-    public class Device
+    public class DualshockDevice
     {
-        public Device(string path)
+        public DualshockDevice(string path)
         {
             Path = path;
         }

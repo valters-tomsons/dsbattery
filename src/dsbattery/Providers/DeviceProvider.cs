@@ -13,10 +13,10 @@ namespace dsbattery.Providers
     {
         private const string DeviceBasePath = "/sys/class/power_supply";
 
-        public async Task<Device[]> QueryConnected(string pathQuery)
+        public async Task<DualshockDevice[]> QueryConnected(string pathQuery)
         {
             var devices = Directory.EnumerateFileSystemEntries(DeviceBasePath, pathQuery + "*").ToArray();
-            var serialized = new Device[devices.Length];
+            var serialized = new DualshockDevice[devices.Length];
 
             for(var i = 0; i < serialized.Length; i++)
             {
@@ -26,12 +26,12 @@ namespace dsbattery.Providers
             return serialized;
         }
 
-        private static async Task<Device> SerializeDevice(string path)
+        private static async Task<DualshockDevice> SerializeDevice(string path)
         {
             var battery = await ReadBattery(path).ConfigureAwait(false);
             var status = await ReadStatus(path).ConfigureAwait(false);
 
-            return new Device(path)
+            return new DualshockDevice(path)
             {
                 BatteryPercentage = battery,
                 Status = status

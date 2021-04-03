@@ -37,7 +37,7 @@ namespace dsbattery.Services
             return result.ToString();
         }
 
-        private static void AppendDevice(StringBuilder builder, Device device)
+        private static void AppendDevice(StringBuilder builder, DualshockDevice device)
         {
             builder.Append("🎮");
 

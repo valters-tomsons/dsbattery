@@ -13,7 +13,7 @@ namespace dsbattery
         private async static Task Main()
         {
             var reporter = new DualshockReporter(_deviceProvider);
-            var result = await reporter.GetBatteryReport().ConfigureAwait(false);
+            var result = await reporter.GetBatteryReport();
 
             Console.WriteLine(result);
         }
