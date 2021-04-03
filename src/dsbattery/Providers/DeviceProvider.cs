@@ -12,6 +12,7 @@ namespace dsbattery.Providers
     public class DeviceProvider : IDeviceProvider
     {
         private const string DeviceBasePath = "/sys/class/power_supply";
+        private DualshockDevice[] _deviceCache;
 
         public async Task<DualshockDevice[]> QueryConnected(string pathQuery)
         {
@@ -23,7 +24,18 @@ namespace dsbattery.Providers
                 serialized[i] = await SerializeDevice(devices[i]).ConfigureAwait(false);
             }
 
-            return serialized;
+            _deviceCache = serialized;
+            return _deviceCache;
+        }
+
+        public DualshockDevice[] CachedQuery()
+        {
+            if (_deviceCache == null)
+            {
+                throw new InvalidOperationException("No devices cached");
+            }
+
+            return _deviceCache;
         }
 
         private static async Task<DualshockDevice> SerializeDevice(string path)

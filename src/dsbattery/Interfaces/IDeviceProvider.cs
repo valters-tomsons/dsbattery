@@ -6,5 +6,6 @@ namespace dsbattery.Interfaces
     public interface IDeviceProvider
     {
         Task<DualshockDevice[]> QueryConnected(string pathQuery);
+        DualshockDevice[] CachedQuery();
     }
 }

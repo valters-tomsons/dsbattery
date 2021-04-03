@@ -10,12 +10,17 @@ namespace dsbattery
     {
         private static readonly IDeviceProvider _deviceProvider = new DeviceProvider();
 
-        private async static Task Main()
+        private async static Task Main(string[] args)
         {
             var reporter = new DualshockReporter(_deviceProvider);
             var result = await reporter.GetBatteryReport();
 
             Console.WriteLine(result);
+
+            if(args?[0] == "-d")
+            {
+                new DeviceDisconnect(_deviceProvider).Disconnect();
+            }
         }
     }
 }
