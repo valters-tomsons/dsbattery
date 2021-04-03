@@ -9,7 +9,7 @@ using dsbattery.Models;
 
 namespace dsbattery.Providers
 {
-    public class NativeReporter : IDeviceReporter
+    public class DeviceProvider : IDeviceProvider
     {
         private const string DeviceBasePath = "/sys/class/power_supply";
 

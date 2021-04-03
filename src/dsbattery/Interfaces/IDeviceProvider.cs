@@ -3,7 +3,7 @@ using dsbattery.Models;
 
 namespace dsbattery.Interfaces
 {
-    public interface IDeviceReporter
+    public interface IDeviceProvider
     {
         Task<Device[]> QueryConnected(string pathQuery);
     }

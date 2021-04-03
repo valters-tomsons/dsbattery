@@ -12,7 +12,7 @@ namespace dsbattery
     {
         private const string Dualshock4_Prefix = "sony_controller_battery";
 
-        private static readonly IDeviceReporter _reporter = new NativeReporter();
+        private static readonly IDeviceProvider _reporter = new DeviceProvider();
 
         private async static Task Main()
         {
