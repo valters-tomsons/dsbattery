@@ -7,7 +7,7 @@
     <TrimMode>Link</TrimMode>
     <PublishReadyToRun>true</PublishReadyToRun>
     <PublishSingleFile>true</PublishSingleFile>
-    <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
+    <RuntimeIdentifiers>linux-x64;linux-arm64</RuntimeIdentifiers>
     <PublishReadyToRunShowWarnings>true</PublishReadyToRunShowWarnings>
     <RootNamespace>dsbattery</RootNamespace>
     <InvariantGlobalization>true</InvariantGlobalization>

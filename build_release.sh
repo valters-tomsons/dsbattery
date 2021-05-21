@@ -1,3 +1,3 @@
 #!/bin/sh
-dotnet publish -c Release --self-contained -o release
+dotnet publish -c Release -r linux-x64 --self-contained -o release
 echo "dsbattery release created"
