@@ -1,3 +1,5 @@
 #!/bin/sh
-dotnet publish -c Release -r linux-x64 --self-contained -o release
-echo "dsbattery release created"
+ARCH="linux-x64"
+
+dotnet publish -c Release -r $ARCH --self-contained -o release_build
+echo "dsbattery release created for $ARCH"
