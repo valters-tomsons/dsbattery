@@ -22,18 +22,28 @@ jobs:
     - name: Install dependencies
       run: dotnet restore
       
-    - name: Build dsbattery_x64 release
-      run: dotnet publish -r linux-x64 -o artifact --configuration Release --no-restore
-    
-    - name: Copy README
-      run: cp README.md artifact/
-      
-    - name: Copy modules
-      run: cp modules artifact/ -r
+    - name: Build dsbattery_x64
+      run: dotnet publish -r linux-x64 -o artifact_x64 --configuration Release --no-restore
 
-    - name: Upload build artifact
+    - name: Build dsbattery_arm64
+      run: dotnet publish -r linux-arm64 -o artifact_arm64 --configuration Release --no-restore
+    
+    - name: Copy README to artifacts
+      run: echo "./artifact_x64 ./artifact_arm64" | xargs -n 1 cp -v README.md
+      
+    - name: Copy modules to artifacts
+      run: echo "./artifact_x64 ./artifact_arm64" | xargs -n 1 cp -v -r modules
+
+    - name: Upload x64 artifact
       uses: actions/upload-artifact@v2.2.2
       with:
-        path: ./artifact
+        path: ./artifact_x64
         if-no-files-found: error
         name: dsbattery-linux-x64
+
+    - name: Upload arm-64 artifact
+      uses: actions/upload-artifact@v2.2.2
+      with:
+        path: ./artifact_arm64
+        if-no-files-found: error
+        name: dsbattery-linux-arm64
