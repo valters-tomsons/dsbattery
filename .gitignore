@@ -17,3 +17,9 @@ bld/
 [Oo]bj/
 [Ll]og/
 release_build/
+
+# PKGBUILD
+distro/arch/pkg/
+distro/arch/src/
+distro/arch/*.tar.gz
+distro/arch/*.tar.zst
