@@ -8,9 +8,8 @@ arch=('x86_64' 'aarch64')
 url='https://github.com/valters-tomsons/dsbattery'
 license=('MIT')
 
-depends=('dotnet-runtime>=5.0.0')
 makedepends=('dotnet-sdk>=5.0.0')
-optdepends=('bluez-tools')
+optdepends=('bluez-tools: disconnect support')
 
 options=('!strip')
 source=("$pkgname-$pkgver.tar.gz::https://github.com/valters-tomsons/dsbattery/archive/refs/tags/${pkgver}.tar.gz")
@@ -30,8 +29,6 @@ build() {
 }
 
 package() {
-    mkdir -p "$pkgdir/usr/bin/"
-
-    cd "$srcdir/$pkgname-$pkgver/${_outputdir}"
-    cp "${pkgname}" "$pkgdir/usr/bin/${pkgname}"
+    install -Dm755 "$srcdir/$pkgname-$pkgver/${_outputdir}/$pkgname" "$pkgdir/usr/bin/${pkgname}"
+    install -Dm644 "$srcdir/$pkgname-$pkgver/LICENSE" "$pkgdir/usr/share/licenses/${pkgname}/LICENSE"
 }
