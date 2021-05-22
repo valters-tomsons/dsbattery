@@ -1,0 +1,37 @@
+# Maintainer: Valters Tomsons <valters.tomsons at protonmail dot com>
+
+pkgname="dsbattery"
+pkgver=1.2.1
+pkgrel=1
+pkgdesc="DualShock 4 controller utility for status bars"
+arch=('x86_64' 'aarch64')
+url='https://github.com/valters-tomsons/dsbattery'
+license=('MIT')
+
+depends=('dotnet-runtime>=5.0.0')
+makedepends=('dotnet-sdk>=5.0.0')
+optdepends=('bluez-tools')
+
+options=('!strip')
+source=("$pkgname-$pkgver.tar.gz::https://github.com/valters-tomsons/dsbattery/archive/refs/tags/${pkgver}.tar.gz")
+sha256sums=('2642c5a91c530a6b89a25dc5a490340d721f1b2f1ffcebc9393bb7cc56ef86bd')
+
+_outputdir="Release"
+
+build() {
+    cd "$pkgname-$pkgver"
+
+    # Determine RID for build
+    case $CARCH in "aarch64") RID=arm64;;
+    "x86_64") RID=x64;;
+    esac
+    
+    dotnet publish -c Release -r linux-"${RID}" -o="${_outputdir}"
+}
+
+package() {
+    mkdir -p "$pkgdir/usr/bin/"
+
+    cd "$srcdir/$pkgname-$pkgver/${_outputdir}"
+    cp "${pkgname}" "$pkgdir/usr/bin/${pkgname}"
+}
