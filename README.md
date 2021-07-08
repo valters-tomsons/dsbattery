@@ -22,6 +22,8 @@ A controller utility for status bars that displays DUALSHOCK 4™ controller bat
 
 If you are using an Arch-based distribution, install [dsbattery](https://aur.archlinux.org/packages/dsbattery/) with your favorite AUR helper.
 
+**Experimental:** Pacman binary releases are available at https://repo.tomsons.me/
+
 ### GitHub releases
 
 Download the latest file under Releases for your architecture, extract and copy `dsbattery` to your desired location.
