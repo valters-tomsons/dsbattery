@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using dsbattery.Enums;
@@ -9,6 +10,8 @@ namespace dsbattery.Services
     public class DualshockReporter : IBatteryReporter
     {
         private const string Dualshock4_Prefix = "sony_controller_battery";
+        private const string Dualsense_Prefix = "ps-controller-battery";
+
         private readonly IDeviceProvider _deviceProvider;
 
         public DualshockReporter(IDeviceProvider deviceProvider)
@@ -18,17 +21,21 @@ namespace dsbattery.Services
 
         public async Task<string> GetBatteryReport()
         {
-            var devices = await _deviceProvider.QueryConnected(Dualshock4_Prefix).ConfigureAwait(false);
-            var deviceLength = devices.Length;
+            var dualshockDevices = await _deviceProvider.QueryConnected(Dualshock4_Prefix).ConfigureAwait(false);
+            var dualsenseDevices = await _deviceProvider.QueryConnected(Dualsense_Prefix).ConfigureAwait(false);
+
+            var sonyDevices = new List<DualshockDevice>();
+            sonyDevices.AddRange(dualshockDevices);
+            sonyDevices.AddRange(dualsenseDevices);
 
             var result = new StringBuilder();
 
-            for(int i = 0; i < deviceLength; i++)
+            for (int i = 0; i < sonyDevices.Count; i++)
             {
-                var device = devices[i];
+                var device = sonyDevices[i];
                 AppendDevice(result, device);
 
-                if(deviceLength > 1 && deviceLength != i + 1)
+                if (sonyDevices.Count > 1 && sonyDevices.Count != i + 1)
                 {
                     result.Append(" | ");
                 }
