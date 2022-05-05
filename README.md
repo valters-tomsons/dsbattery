@@ -1,5 +1,5 @@
 # dsbattery
-A controller utility for status bars that displays DUALSHOCK 4™ controller battery levels.
+A controller utility for status bars that displays DUALSHOCK 4™ and DualSense™ controller battery levels.
 
 ![polybar-preview](https://i.imgur.com/9r9o1hP.png)
 
@@ -30,4 +30,4 @@ Download the latest file under Releases for your architecture, extract and copy 
 
 ## Building
 
-Requires `.NET 5.0 SDK`
+Requires `.NET 6.0 SDK`
