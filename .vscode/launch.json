@@ -1,12 +1,12 @@
 {
-   "version": "0.2.0",
-   "configurations": [
+    "version": "0.2.0",
+    "configurations": [
         {
             "name": ".NET Core Launch (console)",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/src/dsbattery/bin/Debug/net5.0/linux-x64/dsbattery.dll",
+            "program": "${workspaceFolder}/src/dsbattery/bin/Debug/net6.0/dsbattery.dll",
             "args": [],
             "cwd": "${workspaceFolder}",
             "console": "internalConsole",
@@ -18,6 +18,6 @@
             "type": "coreclr",
             "request": "attach",
             "processId": "${command:pickProcess}"
-        }
-    ,]
+        },
+    ]
 }
