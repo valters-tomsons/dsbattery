@@ -1,6 +1,6 @@
 namespace dsbattery.Enums
 {
-    public enum Ds4Status
+    public enum DeviceStatus
     {
         Unknown,
         Charging,

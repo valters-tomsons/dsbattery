@@ -7,14 +7,14 @@ using dsbattery.Models;
 
 namespace dsbattery.Services
 {
-    public class DualshockReporter : IBatteryReporter
+    public class ControllerDeviceReporter : IBatteryReporter
     {
         private const string Dualshock4_Prefix = "sony_controller_battery";
         private const string Dualsense_Prefix = "ps-controller-battery";
 
         private readonly IDeviceProvider _deviceProvider;
 
-        public DualshockReporter(IDeviceProvider deviceProvider)
+        public ControllerDeviceReporter(IDeviceProvider deviceProvider)
         {
             _deviceProvider = deviceProvider;
         }
@@ -24,7 +24,7 @@ namespace dsbattery.Services
             var dualshockDevices = await _deviceProvider.QueryConnected(Dualshock4_Prefix).ConfigureAwait(false);
             var dualsenseDevices = await _deviceProvider.QueryConnected(Dualsense_Prefix).ConfigureAwait(false);
 
-            var sonyDevices = new List<DualshockDevice>();
+            var sonyDevices = new List<ControllerDevice>();
             sonyDevices.AddRange(dualshockDevices);
             sonyDevices.AddRange(dualsenseDevices);
 
@@ -44,11 +44,11 @@ namespace dsbattery.Services
             return result.ToString();
         }
 
-        private static void AppendDevice(StringBuilder builder, DualshockDevice device)
+        private static void AppendDevice(StringBuilder builder, ControllerDevice device)
         {
             builder.Append("🎮");
 
-            if (device.Status == Ds4Status.Charging)
+            if (device.Status == DeviceStatus.Charging)
             {
                 builder.Append('↑');
             }
