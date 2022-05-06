@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System;
 using System.IO;
 using System.Linq;
@@ -6,75 +7,76 @@ using System.Threading.Tasks;
 using dsbattery.Enums;
 using dsbattery.Interfaces;
 using dsbattery.Models;
+using dsbattery.Constants;
 
-namespace dsbattery.Providers
+namespace dsbattery.Providers;
+
+public class DeviceProvider : IDeviceProvider
 {
-    public class DeviceProvider : IDeviceProvider
+    private const string DeviceBasePath = "/sys/class/power_supply";
+    private readonly List<ControllerDevice> _deviceCache = new();
+
+    public async Task<IReadOnlyCollection<ControllerDevice>> QueryConnected(DeviceKind kind)
     {
-        private const string DeviceBasePath = "/sys/class/power_supply";
-        private ControllerDevice[] _deviceCache;
-
-        public async Task<ControllerDevice[]> QueryConnected(string pathQuery)
+        if (kind == DeviceKind.Unknown)
         {
-            var devices = Directory.EnumerateFileSystemEntries(DeviceBasePath, pathQuery + "*").ToArray();
-            var serialized = new ControllerDevice[devices.Length];
-
-            for (var i = 0; i < serialized.Length; i++)
-            {
-                serialized[i] = await SerializeDevice(devices[i]).ConfigureAwait(false);
-            }
-
-            _deviceCache = serialized;
-            return _deviceCache;
+            throw new InvalidOperationException("Cannot query unknown device kind");
         }
 
-        public ControllerDevice[] CachedQuery()
-        {
-            if (_deviceCache == null)
-            {
-                throw new InvalidOperationException("No devices cached");
-            }
+        var queryString = DeviceIdentification.GetQueryString(kind);
+        var devices = Directory.EnumerateFileSystemEntries(DeviceBasePath, queryString + "*").ToArray();
 
-            return _deviceCache;
+        var serialized = new ControllerDevice[devices.Length];
+        for (var i = 0; i < serialized.Length; i++)
+        {
+            serialized[i] = await SerializeDevice(devices[i], kind).ConfigureAwait(false);
         }
 
-        private static async Task<ControllerDevice> SerializeDevice(string path)
+        _deviceCache.AddRange(serialized);
+        return serialized;
+    }
+
+    public IReadOnlyCollection<ControllerDevice> QueryCached()
+    {
+        return _deviceCache;
+    }
+
+    private static async Task<ControllerDevice> SerializeDevice(string path, DeviceKind kind)
+    {
+        var battery = await ReadBattery(path).ConfigureAwait(false);
+        var status = await ReadStatus(path).ConfigureAwait(false);
+
+        return new ControllerDevice(path)
         {
-            var battery = await ReadBattery(path).ConfigureAwait(false);
-            var status = await ReadStatus(path).ConfigureAwait(false);
-            var macAddress = path.Split('_').LastOrDefault();
+            BatteryPercentage = battery,
+            Status = status,
+            Mac = DeviceIdentification.GetMacAddressFromPath(path, kind),
+            Kind = kind
+        };
+    }
 
-            return new ControllerDevice(path)
-            {
-                BatteryPercentage = battery,
-                Status = status,
-                Mac = macAddress
-            };
-        }
+    private static async Task<int> ReadBattery(string devicePath)
+    {
+        const string property = "capacity";
 
-        private static async Task<int> ReadBattery(string devicePath)
-        {
-            const string property = "capacity";
+        var batteryResult = await ReadDeviceProperty(devicePath, property).ConfigureAwait(false);
+        return int.Parse(batteryResult);
+    }
 
-            var batteryResult = await ReadDeviceProperty(devicePath, property).ConfigureAwait(false);
-            return int.Parse(batteryResult);
-        }
+    private static async Task<DeviceStatus> ReadStatus(string devicePath)
+    {
+        const string property = "status";
 
-        private static async Task<DeviceStatus> ReadStatus(string devicePath)
-        {
-            const string property = "status";
+        var statusResult = await ReadDeviceProperty(devicePath, property).ConfigureAwait(false);
+        return Enum.Parse<DeviceStatus>(statusResult, true);
+    }
 
-            var statusResult = await ReadDeviceProperty(devicePath, property).ConfigureAwait(false);
-            return Enum.Parse<DeviceStatus>(statusResult, true);
-        }
+    private static async Task<string> ReadDeviceProperty(string devicePath, string propertyName)
+    {
+        var statusPath = new StringBuilder(devicePath);
+        statusPath.Append(Path.DirectorySeparatorChar);
+        statusPath.Append(propertyName);
 
-        private static async Task<string> ReadDeviceProperty(string devicePath, string propertyName)
-        {
-            var statusPath = new StringBuilder(devicePath);
-            statusPath.Append(Path.DirectorySeparatorChar);
-            statusPath.Append(propertyName);
-
-            return await File.ReadAllTextAsync(statusPath.ToString()).ConfigureAwait(false);
-        }
+        return await File.ReadAllTextAsync(statusPath.ToString()).ConfigureAwait(false);
     }
 }

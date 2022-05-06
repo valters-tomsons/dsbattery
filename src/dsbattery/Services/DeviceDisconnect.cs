@@ -1,40 +1,39 @@
 using System.Diagnostics;
 using dsbattery.Interfaces;
 
-namespace dsbattery.Services
-{
-    public class DeviceDisconnect
-    {
-        private readonly IDeviceProvider _deviceProvider;
+namespace dsbattery.Services;
 
-        public DeviceDisconnect(IDeviceProvider deviceProvider)
+public class DeviceDisconnect
+{
+    private readonly IDeviceProvider _deviceProvider;
+
+    public DeviceDisconnect(IDeviceProvider deviceProvider)
+    {
+        _deviceProvider = deviceProvider;
+    }
+
+    public void Disconnect()
+    {
+        var devices = _deviceProvider.QueryCached();
+
+        if (devices.Count < 1)
         {
-            _deviceProvider = deviceProvider;
+            return;
         }
 
-        public void Disconnect()
+        foreach (var device in devices)
         {
-            var devices = _deviceProvider.CachedQuery();
-
-            if(devices?.Length < 1)
+            var proc = new Process
             {
-                return;
-            }
-
-            for(var i = 0; i < devices.Length; i++)
-            {
-                var proc = new Process
+                StartInfo = new ProcessStartInfo("bt-device", $"-d {device.Mac}")
                 {
-                    StartInfo = new ProcessStartInfo("bt-device", $"-d {devices[i].Mac}")
-                    {
-                        RedirectStandardOutput = true,
-                        RedirectStandardError = true,
-                        RedirectStandardInput = true
-                    }
-                };
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    RedirectStandardInput = true
+                }
+            };
 
-                proc.Start();
-            }
+            proc.Start();
         }
     }
 }

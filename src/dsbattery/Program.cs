@@ -4,23 +4,22 @@ using dsbattery.Interfaces;
 using dsbattery.Providers;
 using dsbattery.Services;
 
-namespace dsbattery
+namespace dsbattery;
+
+internal static class Program
 {
-    internal static class Program
+    private static readonly IDeviceProvider _deviceProvider = new DeviceProvider();
+
+    private async static Task Main(string[] args)
     {
-        private static readonly IDeviceProvider _deviceProvider = new DeviceProvider();
+        var reporter = new ControllerDeviceReporter(_deviceProvider);
+        var result = await reporter.GetBatteryReport();
 
-        private async static Task Main(string[] args)
+        Console.WriteLine(result);
+
+        if (args?.Length > 0 && args[0] == "-d")
         {
-            var reporter = new ControllerDeviceReporter(_deviceProvider);
-            var result = await reporter.GetBatteryReport().ConfigureAwait(false);
-
-            Console.WriteLine(result);
-
-            if (args?.Length > 0 && args[0] == "-d")
-            {
-                new DeviceDisconnect(_deviceProvider).Disconnect();
-            }
+            new DeviceDisconnect(_deviceProvider).Disconnect();
         }
     }
 }

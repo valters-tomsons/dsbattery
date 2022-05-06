@@ -5,55 +5,50 @@ using dsbattery.Enums;
 using dsbattery.Interfaces;
 using dsbattery.Models;
 
-namespace dsbattery.Services
+namespace dsbattery.Services;
+
+public class ControllerDeviceReporter : IBatteryReporter
 {
-    public class ControllerDeviceReporter : IBatteryReporter
+    private readonly IDeviceProvider _deviceProvider;
+
+    public ControllerDeviceReporter(IDeviceProvider deviceProvider)
     {
-        private const string Dualshock4_Prefix = "sony_controller_battery";
-        private const string Dualsense_Prefix = "ps-controller-battery";
+        _deviceProvider = deviceProvider;
+    }
 
-        private readonly IDeviceProvider _deviceProvider;
+    public async Task<string> GetBatteryReport()
+    {
+        var dualshockDevices = await _deviceProvider.QueryConnected(DeviceKind.Dualshock4);
+        var dualsenseDevices = await _deviceProvider.QueryConnected(DeviceKind.Dualsense);
 
-        public ControllerDeviceReporter(IDeviceProvider deviceProvider)
+        var sonyDevices = new List<ControllerDevice>(dualsenseDevices.Count + dualshockDevices.Count);
+        sonyDevices.AddRange(dualshockDevices);
+        sonyDevices.AddRange(dualsenseDevices);
+
+        var result = new StringBuilder();
+        for (int i = 0; i < sonyDevices.Count; i++)
         {
-            _deviceProvider = deviceProvider;
-        }
+            var device = sonyDevices[i];
+            AppendDevice(result, device);
 
-        public async Task<string> GetBatteryReport()
-        {
-            var dualshockDevices = await _deviceProvider.QueryConnected(Dualshock4_Prefix).ConfigureAwait(false);
-            var dualsenseDevices = await _deviceProvider.QueryConnected(Dualsense_Prefix).ConfigureAwait(false);
-
-            var sonyDevices = new List<ControllerDevice>();
-            sonyDevices.AddRange(dualshockDevices);
-            sonyDevices.AddRange(dualsenseDevices);
-
-            var result = new StringBuilder();
-
-            for (int i = 0; i < sonyDevices.Count; i++)
+            if (sonyDevices.Count > 1 && sonyDevices.Count != i + 1)
             {
-                var device = sonyDevices[i];
-                AppendDevice(result, device);
-
-                if (sonyDevices.Count > 1 && sonyDevices.Count != i + 1)
-                {
-                    result.Append(" | ");
-                }
+                result.Append(" | ");
             }
-
-            return result.ToString();
         }
 
-        private static void AppendDevice(StringBuilder builder, ControllerDevice device)
+        return result.ToString();
+    }
+
+    private static void AppendDevice(StringBuilder builder, ControllerDevice device)
+    {
+        builder.Append("🎮");
+
+        if (device.Status == DeviceStatus.Charging)
         {
-            builder.Append("🎮");
-
-            if (device.Status == DeviceStatus.Charging)
-            {
-                builder.Append('↑');
-            }
-
-            builder.Append(' ').Append(device.BatteryPercentage).Append('%');
+            builder.Append('↑');
         }
+
+        builder.Append(' ').Append(device.BatteryPercentage).Append('%');
     }
 }

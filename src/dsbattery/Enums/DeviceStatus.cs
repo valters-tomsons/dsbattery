@@ -1,10 +1,9 @@
-namespace dsbattery.Enums
+namespace dsbattery.Enums;
+
+public enum DeviceStatus
 {
-    public enum DeviceStatus
-    {
-        Unknown,
-        Charging,
-        Discharging,
-        Full
-    }
+    Unknown,
+    Charging,
+    Discharging,
+    Full
 }

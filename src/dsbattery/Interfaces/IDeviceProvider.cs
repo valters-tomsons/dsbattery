@@ -1,11 +1,12 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using dsbattery.Enums;
 using dsbattery.Models;
 
-namespace dsbattery.Interfaces
+namespace dsbattery.Interfaces;
+
+public interface IDeviceProvider
 {
-    public interface IDeviceProvider
-    {
-        Task<ControllerDevice[]> QueryConnected(string pathQuery);
-        ControllerDevice[] CachedQuery();
-    }
+    Task<IReadOnlyCollection<ControllerDevice>> QueryConnected(DeviceKind kind);
+    IReadOnlyCollection<ControllerDevice> QueryCached();
 }
