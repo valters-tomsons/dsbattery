@@ -30,4 +30,4 @@ Download the latest file under Releases for your architecture, extract and copy 
 
 ## Building
 
-Requires `.NET 6.0 SDK`
+Requires `.NET 7.0 SDK`
